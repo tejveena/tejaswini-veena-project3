@@ -1,57 +1,83 @@
 // import logo from './logo.svg';
 import './App.css';
 import firebase from './firebase';
+import DisplayTask from './DisplayTask.js';
 
 import { useState, useEffect } from 'react';
 
 function App() {
   const [tasksList, setTaskList] = useState([]);
+  const [tasksWnotes, setTasksWnotes] = useState();
   const [userInput, setUserInput] = useState('');
+  const [taskInFocus, setTaskInFocus] = useState('');
+  const [taskInFocusObject, setTaskInFocusObject] = useState();
+  // let taskInFocusObject = {};
+  let randomVariable = "somestring";
+
+
   const handleChange = (event) => {
     setUserInput(event.target.value);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   }
   const handleClick = (event) => {
     event.preventDefault();
-  
+    // updating the database with new task name, below is the db reference url
+    // but the task keys have to be changed when the delete feature is added
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/taskName
-    const dbRef = firebase.database().ref(`tasks/task${tasksList.length + 1}`);
-  
+    const taskKey = `task${tasksList.length + 1}`;
+    const dbRef = firebase.database().ref(`tasks/${taskKey}`);
     // here we grab whatever value this.state.userInput has and push it to the database
     dbRef.set({ 'taskName': userInput });
-
-  
     // here we reset the state to an empty string
     setUserInput('');
+    setTaskInFocus(userInput);
+  }
+
+  const handleTaskLinkClick = (event) => {
+    event.preventDefault();
+    // console.log(event.target.text);
+    setTaskInFocus(event.target.text);
   }
 
   useEffect(() => {
-    // Here we create a variable that holds a reference to our database
     const dbRef = firebase.database().ref();
-
-    // Here we add an event listener to that variable that will fire
-    // every time there is a change in the database.
-
-    // This event listener takes a callback function which we will use to get our data
-    // from the database, and call that data 'response'.
     dbRef.on('value', (response) => {
-
-    // Here we use Firebase's .val() method to parse our database info the way we want it
       console.log(response.val());
-      const newState = [];
+      const newState1 = [];
       const data = response.val();
-      let i = 1;
       for (let key in data.tasks) {
-
-        // inside the loop, we push each book name to an array we already created inside the .on() function called newState
-        newState.push(data.tasks[key].taskName);
-        i++;
+        newState1.push(data.tasks[key].taskName);
       }
-    setTaskList(newState);
-
-
+      setTaskList(newState1);
+      setTasksWnotes(JSON.parse(JSON.stringify(data.tasks)));
+      // console.log("on mount "+ JSON.stringify(tasksWnotes));
+      
     })
   }, [])
+
+  // To get all the notes within the task in focus
+  useEffect(() => {
+    // console.log("on mount and dependencies: " + JSON.stringify(tasksWnotes));
+      for (const task in tasksWnotes) {
+        if (tasksWnotes[task].taskName === taskInFocus) {
+          // console.log("on mount and dependencies inside if: " + JSON.stringify(tasksWnotes[task]));
+          // taskInFocusObject = JSON.parse(JSON.stringify(tasksWnotes[task]));
+          // taskInFocusObject = JSON.parse(JSON.stringify(tasksWnotes[task]));
+          // taskInFocusObject = { ...tasksWnotes[task] };
+          // console.log("taskInFocusObject "+ taskInFocusObject.taskName);
+          // setTaskInFocusObject(JSON.parse(JSON.stringify(tasksWnotes[task])));
+          setTaskInFocusObject(tasksWnotes[task]);
+
+          break;
+        }
+      }
+
+
+  },[taskInFocus])
+
+  // console.log("taskInFocusObject outside "+ JSON.stringify(taskInFocusObject.taskName));
+
+ 
 
   return (
     <div>
@@ -64,8 +90,8 @@ function App() {
           {
             tasksList.map((task) => {
               return (
-                <li>
-                  <a href="">
+                <li >
+                  <a style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
                     {task}
                   </a>
                 </li>
@@ -76,11 +102,19 @@ function App() {
       </section>
       <section className="new-task">
         <form>
-          <label htmlFor="create-task">Create a new task: </label>
+          <label htmlFor="create-task">Add New Task: </label>
           <input type="text" name="create-task" id="create-task" onChange={handleChange} value={userInput} />
+
           <button onClick={handleClick}>create</button>
-       </form>
+        </form>
+        {/* <p> {JSON.stringify(taskInFocusObject.taskName)}{ randomVariable}asdf</p> */}
       </section>
+      {/* Display the task page with option to add notes to it */}
+      {
+        taskInFocus ? <DisplayTask {...taskInFocusObject} /> : null
+      }
+      
+
     </div>
   );
 }
