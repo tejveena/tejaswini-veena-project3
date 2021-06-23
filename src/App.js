@@ -70,7 +70,7 @@ function App() {
       }
       // win: using dependency variables to re-render
 
-  },[taskInFocus, newNoteAdded])
+  },[taskInFocus, tasksWnotes, newNoteAdded])
 
 
  
@@ -94,7 +94,7 @@ function App() {
               tasksList.map((task) => {
                 return (
                   <li >
-                    <a style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
+                    <a href={ null} style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
                       {task}
                     </a>
                   </li>

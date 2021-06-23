@@ -31,7 +31,6 @@ function DisplayTask(props) {
     } 
     // updating the database with new note
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/notes/note1
-    const dbRef = firebase.database().ref();
     const noteKey = props.notes ? `note${Object.keys(props.notes).length + 1}` : `note1`;
     const path = `tasks/${props.task}/notes/${noteKey}`;
     console.log(path);
