@@ -39,11 +39,11 @@ function DisplayTask(props) {
     setNoteContent('');
     props.noteAdded();
 
-    // win: getting the reference path to add data 
+    // learning: getting the reference path to add data 
   }
 
   return (
-    <div class="wrapper">
+    <div className="wrapper">
       <section className="display-task">
         <h3>{props.taskName} notes</h3>
         
@@ -60,7 +60,7 @@ function DisplayTask(props) {
               )
             })
               : null
-            // win: iterating correctly through the objects using map
+            // learning: iterating correctly through the objects using map
           }
           
         </div>

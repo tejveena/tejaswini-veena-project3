@@ -67,6 +67,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: left;
+  width: 45%;
 }
 li {
   /* list-style:circle; */
@@ -75,13 +76,23 @@ li {
   line-height: 2rem;
 
 }
-li p {
-  margin: 0;
-  padding: 0;
+li button {
+ 
   text-transform: capitalize;
+  display: inline-block;
+  border: none;
+  margin: 0;
+  text-decoration: underline;
+  background: none;
+  color: black;
+  font-size: 0.9rem;
+  cursor: pointer;
+  
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
-li p:hover {
+li button:hover {
   text-decoration: underline;
   text-decoration-color: #96d3c0;
 }

@@ -36,8 +36,8 @@ function App() {
 
   const handleTaskLinkClick = (event) => {
     event.preventDefault();
-    // console.log(event.target.text);
-    setTaskInFocus(event.target.text);
+    console.log(event.target.textContent);
+    setTaskInFocus(event.target.textContent);
   }
 
   const noteAdded = (flag) => {
@@ -55,7 +55,7 @@ function App() {
       }
       setTaskList(newState1);
       setTasksWnotes(JSON.parse(JSON.stringify(data.tasks)));
-      // win: doing a deep copy of the object because it is nested      
+      // learning: doing a deep copy of the object because it is nested      
     })
   }, [])
 
@@ -64,11 +64,11 @@ function App() {
       for (const task in tasksWnotes) {
         if (tasksWnotes[task].taskName === taskInFocus) {        
           setTaskInFocusObject({ ...tasksWnotes[task], task: task });
-          // win: Adding the task key as a property task: task
+          // learning: Adding the task key as a property task: task
           break;
         }
       }
-      // win: using dependency variables to re-render
+      // learning: using dependency variables to re-render
 
   },[taskInFocus, tasksWnotes, newNoteAdded])
 
@@ -76,7 +76,7 @@ function App() {
  
 
   return (
-    <main class="wrapper">
+    <main className="wrapper">
       <div>
 
         <h1>Mindful Multitasking</h1>
@@ -94,9 +94,9 @@ function App() {
               tasksList.map((task) => {
                 return (
                   <li >
-                    <a href="" style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
+                    <button onClick={handleTaskLinkClick} >
                       {task}
-                    </a>
+                    </button>
                   </li>
                 )
               })
@@ -122,11 +122,11 @@ function App() {
       {
         taskInFocus ? <DisplayTask {...taskInFocusObject} noteAdded={ ()=>noteAdded(!newNoteAdded)}/> : null
       }
-      {/* win : !newNoteAdded and child component updating state */}
-      {/* win: correctly passing the props, using taskInFocusObject as a state rather than a global variable. The global variable was set in useEffect() which obviously was assigned only after the DisplayTask component was called, hence passing undefined as props, debugging ate a huge chunk of time*/}
+      {/* learning : !newNoteAdded and child component updating state */}
+      {/* learning: correctly passing the props, using taskInFocusObject as a state rather than a global variable. The global variable was set in useEffect() which obviously was assigned only after the DisplayTask component was called, hence passing undefined as props, debugging ate a huge chunk of time*/}
       
       <footer>
-        <p>Created at <a href="www.junocollege.com" class="footer-link">Juno College</a></p>
+        <p>Created at <a href="www.junocollege.com" className="footer-link">Juno College</a></p>
       </footer>
 
     </main>
