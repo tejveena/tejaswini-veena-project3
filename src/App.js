@@ -4,6 +4,7 @@ import firebase from './firebase';
 import DisplayTask from './DisplayTask.js';
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-scroll';
 
 function App() {
   const [tasksList, setTaskList] = useState([]);
@@ -94,9 +95,9 @@ function App() {
               tasksList.map((task) => {
                 return (
                   <li >
-                    <button onClick={handleTaskLinkClick} >
+                    <Link to="task-head" spy={true} smooth={true} onClick={handleTaskLinkClick} >
                       {task}
-                    </button>
+                    </Link>
                   </li>
                 )
               })
@@ -115,10 +116,12 @@ function App() {
           <label htmlFor="create-task">New Task : </label>
           <input type="text" name="create-task" id="create-task" onChange={handleChange} value={userInput} />
 
-          <button onClick={handleClick}>+</button>
+          <Link to="task-head" spy={true} smooth={true} onClick={handleClick}>+</Link>
+          {/* learning: used react-scroll */}
         </form>
       </section>
       {/* Display the task page with option to add notes to it */}
+      <div id="task-head"></div>
       {
         taskInFocus ? <DisplayTask {...taskInFocusObject} noteAdded={ ()=>noteAdded(!newNoteAdded)}/> : null
       }

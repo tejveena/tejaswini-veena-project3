@@ -55,7 +55,7 @@ function DisplayTask(props) {
               return (
                 <div className="note">
                   <p className="timestamp">{props.notes[note].timestamp}</p>
-                  <p>{props.notes[note].content}</p>
+                  <p className="content">{props.notes[note].content}</p>
                 </div>
               )
             })
@@ -69,7 +69,9 @@ function DisplayTask(props) {
         <section className="new-note">
           <form id="note">
             <label className="sr-only" htmlFor="note">Add your note here</label>
-            <textarea name="note" placeholder="Where are you at in your task? Save it" onChange={handleChangeTextarea} value={ noteContent} />
+            <div className="textarea">
+              <textarea name="note" placeholder="  Where are you at in your task? Save it" onChange={handleChangeTextarea} value={ noteContent} />
+            </div>
             <button type="submit" onClick={ handleNoteSave}>Save</button>
           </form>
         </section>
