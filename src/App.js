@@ -94,9 +94,9 @@ function App() {
               tasksList.map((task) => {
                 return (
                   <li >
-                    <a href={ null} style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
+                    <p style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
                       {task}
-                    </a>
+                    </p>
                   </li>
                 )
               })

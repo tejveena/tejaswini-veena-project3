@@ -75,10 +75,13 @@ li {
   line-height: 2rem;
 
 }
-a{
+li p {
+  margin: 0;
+  padding: 0;
   text-transform: capitalize;
 }
-a:hover {
+
+li p:hover {
   text-decoration: underline;
   text-decoration-color: #96d3c0;
 }
