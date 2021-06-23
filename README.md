@@ -1,3 +1,20 @@
+Tasks
+ |
+ |--task1
+      |
+      |--notes
+      |    |
+      |    |--note1
+      |        |
+      |        |--content
+      |        |
+      |        |--timestamp
+      |
+      |--taskName
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
