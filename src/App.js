@@ -20,6 +20,9 @@ function App() {
   }
   const handleClick = (event) => {
     event.preventDefault();
+    if (!userInput) {
+      return;
+    }
     // updating the database with new task name, below is the db reference url
     // Important: the task keys have to be changed when the delete feature is added
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/taskName
@@ -60,7 +63,8 @@ function App() {
   useEffect(() => {
       for (const task in tasksWnotes) {
         if (tasksWnotes[task].taskName === taskInFocus) {        
-          setTaskInFocusObject({ ...tasksWnotes[task], task:task });
+          setTaskInFocusObject({ ...tasksWnotes[task], task: task });
+          // win: Adding the task key as a property task: task
           break;
         }
       }
@@ -73,24 +77,38 @@ function App() {
 
   return (
     <main class="wrapper">
-      <h1>Mindful Multitasking</h1>
-      <h2>Save your task context in a note</h2>
-      <p>( Click on an Existing task to continue or Add a New task and take notes )</p>
+      <div>
+
+        <h1>Mindful Multitasking</h1>
+        <h2>Keep track of completed items in your tasks</h2>
+        <p>( Click on an Existing task to continue or Add a New task and take notes )
+        </p>
+      </div>
       <section className="task-list">
-        <h3>Existing Task List</h3>
-        <ul>
-          {
-            tasksList.map((task) => {
-              return (
-                <li >
-                  <a style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
-                    {task}
-                  </a>
-                </li>
-              )
-            })
-          }
-        </ul>
+        {
+          tasksList ?
+          <>
+          <h3>Existing Task List</h3>
+            <ul>
+            {
+              tasksList.map((task) => {
+                return (
+                  <li >
+                    <a style={{cursor: 'pointer'}} onClick={handleTaskLinkClick} >
+                      {task}
+                    </a>
+                  </li>
+                )
+              })
+            }
+            </ul>
+            </>
+            :
+            <h3>Add a New Task to start</h3>
+            // Edge case handling
+        }
+        
+        
       </section>
       <section className="new-task">
         <form>
@@ -104,7 +122,7 @@ function App() {
       {
         taskInFocus ? <DisplayTask {...taskInFocusObject} noteAdded={ ()=>noteAdded(!newNoteAdded)}/> : null
       }
-      {/* win : !newNoteAdded and child updating state */}
+      {/* win : !newNoteAdded and child component updating state */}
       {/* win: correctly passing the props, using taskInFocusObject as a state rather than a global variable. The global variable was set in useEffect() which obviously was assigned only after the DisplayTask component was called, hence passing undefined as props, debugging ate a huge chunk of time*/}
       
       <footer>

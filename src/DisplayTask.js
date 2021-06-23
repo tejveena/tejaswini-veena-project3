@@ -7,7 +7,7 @@ function DisplayTask(props) {
   console.log("in DisplayTask component");
   console.log(props);
 
-  const [addNewNoteFlag, setAddNewNoteFlag] = useState(false);
+ 
   const [noteContent, setNoteContent] = useState('');
 
   const currentTimestamp = () => {
@@ -17,9 +17,7 @@ function DisplayTask(props) {
     const localDateFormat = dateObject.toLocaleString('en-US');
     return localDateFormat;
   }
-  const handleNewNoteClick = () => {
-    setAddNewNoteFlag(true);
-  }
+ 
   const handleChangeTextarea = (event) => {
     // console.log(event.target.value);
     setNoteContent(event.target.value);
@@ -27,6 +25,10 @@ function DisplayTask(props) {
  
   const handleNoteSave = (event) => {
     event.preventDefault();
+    // Error handling
+    if (!noteContent) {
+      return;
+    } 
     // updating the database with new note
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/notes/note1
     const dbRef = firebase.database().ref();
@@ -38,11 +40,11 @@ function DisplayTask(props) {
     setNoteContent('');
     props.noteAdded();
 
-    // win: getting the path to update
+    // win: getting the reference path to add data 
   }
 
   return (
-    <div>
+    <div class="wrapper">
       <section className="display-task">
         <h3>{props.taskName} notes</h3>
         
@@ -50,10 +52,10 @@ function DisplayTask(props) {
           {
             props.notes ?
             Object.keys(props.notes).map((note) => {
-              console.log(props.notes[note].content);
+              // console.log(props.notes[note].content);
               return (
-                <div>
-                  <p>{props.notes[note].timestamp}</p>
+                <div className="note">
+                  <p className="timestamp">{props.notes[note].timestamp}</p>
                   <p>{props.notes[note].content}</p>
                 </div>
               )
@@ -63,21 +65,17 @@ function DisplayTask(props) {
           }
           
         </div>
-        <button onClick={handleNewNoteClick}>write new note</button>
-        {
-          addNewNoteFlag ?
-            <section className="new-note">
-              {/* <p>{currentTimestamp()}</p> */}
-              <p>Where are you at in your task? Save it</p>
-              <form id="note">
-                <label className="sr-only" htmlFor="note">Add your note here</label>
-                {/* <input type="textarea" name="note" onChange={handleChangeTextarea} /> */}
-                <textarea name="note" onChange={handleChangeTextarea} value={ noteContent} />
-                <button type="submit" onClick={ handleNoteSave}>Save</button>
-              </form>
-            </section>
-            : null
-        }
+       
+        
+        <section className="new-note">
+          <form id="note">
+            <label className="sr-only" htmlFor="note">Add your note here</label>
+            <textarea name="note" placeholder="Where are you at in your task? Save it" onChange={handleChangeTextarea} value={ noteContent} />
+            <button type="submit" onClick={ handleNoteSave}>Save</button>
+          </form>
+        </section>
+            
+        
       </section>
     </div>
   )
