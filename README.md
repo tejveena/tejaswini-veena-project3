@@ -1,3 +1,5 @@
+FIREBASE STRUCTURE
+
 Tasks
  |
  |--task1
