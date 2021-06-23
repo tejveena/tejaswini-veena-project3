@@ -35,12 +35,16 @@ function DisplayTask(props) {
     console.log(path);
     const dbRefInsertNotes = firebase.database().ref(`${path}`);
     dbRefInsertNotes.set({ 'content': noteContent, 'timestamp': currentTimestamp() });
+    setNoteContent('');
+    props.noteAdded();
+
+    // win: getting the path to update
   }
 
   return (
     <div>
       <section className="display-task">
-        <h3>{props.taskName}</h3>
+        <h3>{props.taskName} notes</h3>
         
         <div className="note-list">
           {
@@ -55,7 +59,7 @@ function DisplayTask(props) {
               )
             })
               : null
-           
+            // win: iterating correctly through the objects using map
           }
           
         </div>

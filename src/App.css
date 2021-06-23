@@ -89,7 +89,7 @@ a:hover {
   margin: 0 auto;
 }
 
-header {
+main {
   background: rgb(189, 240, 247);
   padding: 2rem;
   margin-top: 5%;
@@ -123,5 +123,16 @@ button:hover {
 }
 .new-task form label {
   margin-right:0.5rem;
+  font-weight: bold;
+}
+
+footer {
+  background-color: #96d3c0;
+  padding: 1%;
+  border-radius: 25px;
+  font-size: 0.8rem;
+}
+.footer-link {
+  color: black;
 }
 

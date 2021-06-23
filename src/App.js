@@ -11,8 +11,7 @@ function App() {
   const [userInput, setUserInput] = useState('');
   const [taskInFocus, setTaskInFocus] = useState('');
   const [taskInFocusObject, setTaskInFocusObject] = useState();
-  // let taskInFocusObject = {};
-  let randomVariable = "somestring";
+  const [newNoteAdded, setNewNoteAdded] = useState(false);
 
 
   const handleChange = (event) => {
@@ -22,11 +21,10 @@ function App() {
   const handleClick = (event) => {
     event.preventDefault();
     // updating the database with new task name, below is the db reference url
-    // but the task keys have to be changed when the delete feature is added
+    // Important: the task keys have to be changed when the delete feature is added
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/taskName
     const taskKey = `task${tasksList.length + 1}`;
     const dbRef = firebase.database().ref(`tasks/${taskKey}`);
-    // here we grab whatever value this.state.userInput has and push it to the database
     dbRef.set({ 'taskName': userInput });
     // here we reset the state to an empty string
     setUserInput('');
@@ -37,6 +35,10 @@ function App() {
     event.preventDefault();
     // console.log(event.target.text);
     setTaskInFocus(event.target.text);
+  }
+
+  const noteAdded = (flag) => {
+    setNewNoteAdded(flag);
   }
 
   useEffect(() => {
@@ -50,33 +52,30 @@ function App() {
       }
       setTaskList(newState1);
       setTasksWnotes(JSON.parse(JSON.stringify(data.tasks)));
-      // console.log("on mount "+ JSON.stringify(tasksWnotes));
-      
+      // win: doing a deep copy of the object because it is nested      
     })
   }, [])
 
-  // To get all the notes within the task in focus
+  // To get all the notes within the task-in-focus
   useEffect(() => {
-    // console.log("on mount and dependencies: " + JSON.stringify(tasksWnotes));
       for (const task in tasksWnotes) {
         if (tasksWnotes[task].taskName === taskInFocus) {        
           setTaskInFocusObject({ ...tasksWnotes[task], task:task });
           break;
         }
       }
+      // win: using dependency variables to re-render
 
+  },[taskInFocus, newNoteAdded])
 
-  },[taskInFocus])
-
-  // console.log("taskInFocusObject outside "+ JSON.stringify(taskInFocusObject.taskName));
 
  
 
   return (
-    <header class="wrapper">
+    <main class="wrapper">
       <h1>Mindful Multitasking</h1>
       <h2>Save your task context in a note</h2>
-      
+      <p>( Click on an Existing task to continue or Add a New task and take notes )</p>
       <section className="task-list">
         <h3>Existing Task List</h3>
         <ul>
@@ -100,15 +99,19 @@ function App() {
 
           <button onClick={handleClick}>+</button>
         </form>
-        {/* <p> {JSON.stringify(taskInFocusObject.taskName)}{ randomVariable}asdf</p> */}
       </section>
       {/* Display the task page with option to add notes to it */}
       {
-        taskInFocus ? <DisplayTask {...taskInFocusObject} /> : null
+        taskInFocus ? <DisplayTask {...taskInFocusObject} noteAdded={ ()=>noteAdded(!newNoteAdded)}/> : null
       }
+      {/* win : !newNoteAdded and child updating state */}
+      {/* win: correctly passing the props, using taskInFocusObject as a state rather than a global variable. The global variable was set in useEffect() which obviously was assigned only after the DisplayTask component was called, hence passing undefined as props, debugging ate a huge chunk of time*/}
       
+      <footer>
+        <p>Created at <a href="www.junocollege.com" class="footer-link">Juno College</a></p>
+      </footer>
 
-    </header>
+    </main>
   );
 }
 
