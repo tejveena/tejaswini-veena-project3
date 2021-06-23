@@ -59,15 +59,8 @@ function App() {
   useEffect(() => {
     // console.log("on mount and dependencies: " + JSON.stringify(tasksWnotes));
       for (const task in tasksWnotes) {
-        if (tasksWnotes[task].taskName === taskInFocus) {
-          // console.log("on mount and dependencies inside if: " + JSON.stringify(tasksWnotes[task]));
-          // taskInFocusObject = JSON.parse(JSON.stringify(tasksWnotes[task]));
-          // taskInFocusObject = JSON.parse(JSON.stringify(tasksWnotes[task]));
-          // taskInFocusObject = { ...tasksWnotes[task] };
-          // console.log("taskInFocusObject "+ taskInFocusObject.taskName);
-          // setTaskInFocusObject(JSON.parse(JSON.stringify(tasksWnotes[task])));
-          setTaskInFocusObject(tasksWnotes[task]);
-
+        if (tasksWnotes[task].taskName === taskInFocus) {        
+          setTaskInFocusObject({ ...tasksWnotes[task], task:task });
           break;
         }
       }
@@ -80,12 +73,12 @@ function App() {
  
 
   return (
-    <div>
+    <header class="wrapper">
       <h1>Mindful Multitasking</h1>
       <h2>Save your task context in a note</h2>
-      <h3>Task List</h3>
       
       <section className="task-list">
+        <h3>Existing Task List</h3>
         <ul>
           {
             tasksList.map((task) => {
@@ -102,10 +95,10 @@ function App() {
       </section>
       <section className="new-task">
         <form>
-          <label htmlFor="create-task">Add New Task: </label>
+          <label htmlFor="create-task">New Task : </label>
           <input type="text" name="create-task" id="create-task" onChange={handleChange} value={userInput} />
 
-          <button onClick={handleClick}>create</button>
+          <button onClick={handleClick}>+</button>
         </form>
         {/* <p> {JSON.stringify(taskInFocusObject.taskName)}{ randomVariable}asdf</p> */}
       </section>
@@ -115,7 +108,7 @@ function App() {
       }
       
 
-    </div>
+    </header>
   );
 }
 
