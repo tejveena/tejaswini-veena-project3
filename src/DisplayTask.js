@@ -4,9 +4,6 @@ import firebase from './firebase';
 import { useState } from 'react';
 
 function DisplayTask(props) {
-  console.log("in DisplayTask component");
-  console.log(props);
-
  
   const [noteContent, setNoteContent] = useState('');
 
@@ -33,7 +30,6 @@ function DisplayTask(props) {
     // https://tasksfirebase-c494d-default-rtdb.firebaseio.com/tasks/task1/notes/note1
     const noteKey = props.notes ? `note${Object.keys(props.notes).length + 1}` : `note1`;
     const path = `tasks/${props.task}/notes/${noteKey}`;
-    console.log(path);
     const dbRefInsertNotes = firebase.database().ref(`${path}`);
     dbRefInsertNotes.set({ 'content': noteContent, 'timestamp': currentTimestamp() });
     setNoteContent('');
@@ -42,10 +38,21 @@ function DisplayTask(props) {
     // learning: getting the reference path to add data 
   }
 
+  const handleDeleteTask = () => {
+    props.removeTask();
+
+    const path = `tasks/${props.task}`;
+    const dbRefDeleteTask = firebase.database().ref(`${path}`);
+    dbRefDeleteTask.remove();
+    
+    // dbRefDeleteTask.child(key)
+  }
+
   return (
     <div className="wrapper">
       <section className="display-task">
         <h3>{props.taskName} notes</h3>
+        <button onClick={handleDeleteTask}>Delete This Task</button>
         
         <div className="note-list">
           {
